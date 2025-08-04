@@ -20,6 +20,20 @@ namespace ASP.Net.Mapper
                 LastDiv = stock.LastDiv,
                 Industry = stock.Industry,
                 MarketCap = stock.MarketCap
+            };
+        }
+
+        public static Stock ToStockEntity(this CreateStockRequest request)
+        {
+            return new Stock
+            {
+                Symbol = request.Symbol,
+                CompanyName = request.CompanyName,
+                Purchase = request.Purchase,
+                LastDiv = request.LastDiv,
+                Industry = request.Industry,
+                MarketCap = request.MarketCap
+
             }; 
         }
     }
