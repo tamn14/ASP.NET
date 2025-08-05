@@ -1,4 +1,5 @@
 using ASP.Net.Data;
+using ASP.Net.Interface;
 using ASP.Net.Repository;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,8 @@ builder.Services.AddDbContext<ApplicationDBContext>(option =>
 });
 
 builder.Services.AddScoped<IStockRepository, StockRepository>(); 
+builder.Services.AddScoped<ICommentRepository, CommentRepository>(); 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
