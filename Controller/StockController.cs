@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ASP.Net.Data;
 using ASP.Net.Dto.Stocks;
+using ASP.Net.Helpers;
 using ASP.Net.Mapper;
 using ASP.Net.Models;
 using ASP.Net.Repository;
@@ -28,9 +29,9 @@ namespace ASP.Net.Controller
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] QueryObject queryObject)
         {
-            var stocks = await _stockRepo.GetAllAsync();
+            var stocks = await _stockRepo.GetAllAsync(queryObject);
 
             var stockDto = stocks.Select(s => s.ToStockDto());
             return Ok(stockDto);

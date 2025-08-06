@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ASP.Net.Data;
 using ASP.Net.Dto.Stocks;
+using ASP.Net.Helpers;
 using ASP.Net.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,20 +40,30 @@ namespace ASP.Net.Repository
             return Stock; 
         }
 
-        public async Task<List<Stock>> GetAllAsync()
+        public async Task<List<Stock>> GetAllAsync(QueryObject queryObject)
         {
-            return await _context.Stocks.ToListAsync();
+            var stocks = _context.Stocks.Include(c => c.Comments).AsQueryable();
+            if (!string.IsNullOrWhiteSpace(queryObject.CompanyName))
+            {
+                stocks = stocks.Where(s => s.CompanyName.Contains(queryObject.CompanyName));
+            }
+
+            if (!string.IsNullOrWhiteSpace(queryObject.Symbol))
+            {
+                stocks = stocks.Where(s => s.Symbol.Contains(queryObject.Symbol));
+            }
+            return await stocks.ToListAsync(); 
         }
 
         public async Task<Stock?> GetByIdAsync(int id)
         {
-            return await _context.Stocks.FindAsync(id);
+            return await _context.Stocks.Include(c=>c.Comments).FirstOrDefaultAsync(s => s.Id == id);
         }
 
         public async Task<Stock?> UpdateAsyns(int id, UpdateStockRequest updateStockRequest)
         {
             // FirstOrDefaultAsync can get with many other props
-            var existedStock = await _context.Stocks.FirstOrDefaultAsync(s => s.Id == id);
+            var existedStock = await _context.Stocks.Include(c=>c.Comments).FirstOrDefaultAsync(s => s.Id == id);
             if (existedStock == null)
             {
                 return null;
