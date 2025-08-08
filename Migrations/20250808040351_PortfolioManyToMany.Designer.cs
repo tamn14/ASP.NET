@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASP.Net.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250807054943_SeedRole")]
-    partial class SeedRole
+    [Migration("20250808040351_PortfolioManyToMany")]
+    partial class PortfolioManyToMany
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,11 +92,8 @@ namespace ASP.Net.Migrations
 
             modelBuilder.Entity("ASP.Net.Models.Comment", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -105,8 +102,8 @@ namespace ASP.Net.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("StockId")
-                        .HasColumnType("int");
+                    b.Property<string>("StockId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -119,13 +116,25 @@ namespace ASP.Net.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("ASP.Net.Models.Portfolio", b =>
+                {
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("StockId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("AppUserId", "StockId");
+
+                    b.HasIndex("StockId");
+
+                    b.ToTable("Portfolio");
+                });
+
             modelBuilder.Entity("ASP.Net.Models.Stock", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
@@ -182,13 +191,13 @@ namespace ASP.Net.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "054fb6f9-fc22-4496-ba1f-21ef6cdf83f9",
+                            Id = "5b52ae32-5188-47cc-80a9-67e87b2bef60",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "d475b788-4832-4d9f-8c81-8897161d890f",
+                            Id = "89dee119-e6c6-4d38-b7c8-a49de0a8fadd",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -309,6 +318,25 @@ namespace ASP.Net.Migrations
                     b.Navigation("Stock");
                 });
 
+            modelBuilder.Entity("ASP.Net.Models.Portfolio", b =>
+                {
+                    b.HasOne("ASP.Net.Models.AppUser", "AppUser")
+                        .WithMany("Portfolios")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ASP.Net.Models.Stock", "stock")
+                        .WithMany("Portfolios")
+                        .HasForeignKey("StockId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("stock");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -360,9 +388,16 @@ namespace ASP.Net.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ASP.Net.Models.AppUser", b =>
+                {
+                    b.Navigation("Portfolios");
+                });
+
             modelBuilder.Entity("ASP.Net.Models.Stock", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Portfolios");
                 });
 #pragma warning restore 612, 618
         }

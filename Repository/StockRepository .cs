@@ -27,7 +27,7 @@ namespace ASP.Net.Repository
             return stock; 
         }
 
-        public async Task<Stock?> DeleteAsync(int id)
+        public async Task<Stock?> DeleteAsync(string id)
         {
             // FirstOrDefaultAsync can get with many other props
             var Stock = await _context.Stocks.FirstOrDefaultAsync(s => s.Id == id);
@@ -68,12 +68,12 @@ namespace ASP.Net.Repository
             return await stocks.Skip(skipNummber).Take(queryObject.PageSize).ToListAsync(); 
         }
 
-        public async Task<Stock?> GetByIdAsync(int id)
+        public async Task<Stock?> GetByIdAsync(string id)
         {
             return await _context.Stocks.Include(c=>c.Comments).FirstOrDefaultAsync(s => s.Id == id);
         }
 
-        public async Task<Stock?> UpdateAsyns(int id, UpdateStockRequest updateStockRequest)
+        public async Task<Stock?> UpdateAsyns(string id, UpdateStockRequest updateStockRequest)
         {
             // FirstOrDefaultAsync can get with many other props
             var existedStock = await _context.Stocks.Include(c=>c.Comments).FirstOrDefaultAsync(s => s.Id == id);

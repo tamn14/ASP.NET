@@ -17,6 +17,6 @@ namespace ASP.Net.Dto.Comment
         [MaxLength(280, ErrorMessage = " Title cannot be over 280 characters")]
         public string Content { get; set; } = string.Empty;
 
-        public int? StockId { get; set; }
+        public string? StockId { get; set; }
     }
 }

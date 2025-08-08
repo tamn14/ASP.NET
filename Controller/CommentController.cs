@@ -26,7 +26,7 @@ namespace ASP.Net.Controller
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] string id)
         {
            
             var Comment = await _commentRepo.GetByIdAsync(id);
@@ -51,7 +51,7 @@ namespace ASP.Net.Controller
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateComment updateComment)
+        public async Task<IActionResult> Update([FromRoute] string id, [FromBody] UpdateComment updateComment)
         {
             if (!ModelState.IsValid)
             {
@@ -67,7 +67,7 @@ namespace ASP.Net.Controller
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
+        public async Task<IActionResult> Delete([FromRoute] string id)
         {
             
             var CommentDelete = await _commentRepo.DeleteCommentAsync(id);

@@ -22,7 +22,7 @@ namespace ASP.Net.Repository
 
         public async Task<Comment?> CreateCommentAsync(Comment comment)
         {
-            var Stock = await _context.Stocks.FirstOrDefaultAsync(s => s.Id == comment.StockId);
+            var Stock = await _context.Stocks.FirstOrDefaultAsync(s => s.Id == comment.Id);
             if (Stock == null)
             {
                 return null;
@@ -33,7 +33,7 @@ namespace ASP.Net.Repository
 
         }
 
-        public async Task<Comment?> DeleteCommentAsync(int id)
+        public async Task<Comment?> DeleteCommentAsync(string id)
         {
             var Comment = await _context.Comments.FirstOrDefaultAsync(s => s.Id == id);
             if (Comment == null)
@@ -51,13 +51,13 @@ namespace ASP.Net.Repository
             return await _context.Comments.ToListAsync();
         }
 
-        public async Task<Comment?> GetByIdAsync(int id)
+        public async Task<Comment?> GetByIdAsync(string id)
         {
             return await _context.Comments.FindAsync(id); 
 
         }
 
-        public async Task<Comment?> UpdateCommentAsync(int id, UpdateComment updateComment)
+        public async Task<Comment?> UpdateCommentAsync(string id, UpdateComment updateComment)
         {
             var Comment = await _context.Comments.FirstOrDefaultAsync(s => s.Id == id);
             var Stock = await _context.Stocks.FirstOrDefaultAsync(s => s.Id == updateComment.StockId); 

@@ -12,10 +12,10 @@ namespace ASP.Net.Repository
     public interface IStockRepository
     {
         Task<List<Stock>> GetAllAsync(QueryObject queryObject);
-        Task<Stock?> GetByIdAsync(int id);
+        Task<Stock?> GetByIdAsync(string id);
 
-        Task<Stock?> UpdateAsyns(int id, UpdateStockRequest updateStockRequest);
+        Task<Stock?> UpdateAsyns(string id, UpdateStockRequest updateStockRequest);
         Task<Stock?> CreateAsync(Stock stock);
-        Task<Stock?> DeleteAsync(int id); 
+        Task<Stock?> DeleteAsync(string id); 
     }
 }

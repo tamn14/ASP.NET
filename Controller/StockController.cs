@@ -38,7 +38,7 @@ namespace ASP.Net.Controller
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] string id)
         {
             var stock = await _stockRepo.GetByIdAsync(id);
             if (stock == null)
@@ -64,7 +64,7 @@ namespace ASP.Net.Controller
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockRequest request)
+        public async Task<IActionResult> Update([FromRoute] string id, [FromBody] UpdateStockRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -81,7 +81,7 @@ namespace ASP.Net.Controller
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
+        public async Task<IActionResult> Delete([FromRoute] string id)
         {
             var stock = await _stockRepo.DeleteAsync(id);
             if (stock == null)
