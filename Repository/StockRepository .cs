@@ -73,6 +73,11 @@ namespace ASP.Net.Repository
             return await _context.Stocks.Include(c=>c.Comments).FirstOrDefaultAsync(s => s.Id == id);
         }
 
+        public async Task<Stock?> GetSymbolAsync(string Symbol)
+        {
+            return await _context.Stocks.FirstOrDefaultAsync(s => s.Symbol == Symbol); 
+        }
+
         public async Task<Stock?> UpdateAsyns(string id, UpdateStockRequest updateStockRequest)
         {
             // FirstOrDefaultAsync can get with many other props
