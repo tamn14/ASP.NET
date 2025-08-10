@@ -73,9 +73,30 @@ namespace ASP.Net.Controller
             }
             else
             {
-                return Created(); 
+                return Created();
             }
-            
+
+        }
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> DeletePortfolio(String symbol)
+        {
+            var username = User.getUserName();
+            var appUser = await _userManager.FindByNameAsync(username);
+            var userPortfolio = await _portpolioRepo.GetUserPortfolio(appUser);
+
+            var filteredStock = userPortfolio.Where(s => s.Symbol.ToLower() == symbol.ToLower());
+            if (filteredStock.Count() == 1)
+            {
+                await _portpolioRepo.DeletePortfolio(appUser, symbol);
+            }
+            else
+            {
+                return BadRequest("Stock not in your portfolio");
+            }
+
+            return Ok(); 
         }
 
 
