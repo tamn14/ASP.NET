@@ -18,5 +18,8 @@ namespace ASP.Net.Models
         //navigate , FE can join it and get data of Stock
         // FE no create FK with it . FE will connect navigation to StockId
         public Stock? Stock { get; set; }
+
+        public string AppUserId { get; set; }
+        public AppUser appUser { get; set;  } 
     }
 }

@@ -1,7 +1,10 @@
 
 using ASP.Net.Dto.Comment;
+using ASP.Net.Extention;
 using ASP.Net.Interface;
 using ASP.Net.Mapper;
+using ASP.Net.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Net.Controller
@@ -11,9 +14,11 @@ namespace ASP.Net.Controller
     public class CommentController : ControllerBase
     {
         private readonly ICommentRepository _commentRepo;
-        public CommentController(ICommentRepository commentRepo)
+        private readonly UserManager<AppUser> _userManager;
+        public CommentController(ICommentRepository commentRepo, UserManager<AppUser> userManager)
         {
             _commentRepo = commentRepo;
+            _userManager = userManager; 
         }
 
         [HttpGet]
@@ -45,7 +50,15 @@ namespace ASP.Net.Controller
                 return BadRequest(ModelState);
 
             }
+
+            var username = User.getUserName();
+            var appUser = await _userManager.FindByNameAsync(username); 
+
+
             var commentModel = createComment.ToCommentEntity();
+
+            commentModel.AppUserId = appUser.Id; 
+
             var commentCreated = await _commentRepo.CreateCommentAsync(commentModel);
             return CreatedAtAction(nameof(GetById), new { id = commentCreated.Id }, commentCreated.ToCommentDTO());
         }

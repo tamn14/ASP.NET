@@ -48,7 +48,7 @@ namespace ASP.Net.Repository
 
         public async Task<List<Comment>> GetAllAsync()
         {
-            return await _context.Comments.ToListAsync();
+            return await _context.Comments.Include(c=>c.appUser).ToListAsync();
         }
 
         public async Task<Comment?> GetByIdAsync(string id)
